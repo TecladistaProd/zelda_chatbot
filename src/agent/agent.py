@@ -2,7 +2,6 @@ from typing import Annotated, Literal, TypedDict
 
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
-from langdetect import detect, LangDetectException
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
@@ -18,6 +17,7 @@ SYSTEM_PROMPT = (
     "If the question is clearly unrelated to The Legend of Zelda, politely let the user know you can only "
     "help with Zelda topics and invite them to ask something about it. "
     "Never mention the knowledge base, tools, or any retrieval process in your answers."
+    "Try to answer in same user language, but if you can't just use english!"
 )
 
 tools = [zelda_rag]
@@ -26,26 +26,12 @@ _llm = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0.2)
 llm_with_tools = _llm.bind_tools(tools)
 
 
-def _detect_language(messages: list[BaseMessage]) -> str:
-    for msg in reversed(messages):
-        if isinstance(msg, HumanMessage) and msg.content.strip():
-            try:
-                return detect(msg.content)
-            except LangDetectException:
-                return "en"
-    return "en"
-
-
 class AgentState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
 
 
 def agent_node(state: AgentState):
-    language = _detect_language(state["messages"])
-    lang_note = (
-        f" Respond in the language with ISO code '{language}' if you are able to; otherwise fall back to English."
-    )
-    prompt = SystemMessage(content=SYSTEM_PROMPT + lang_note)
+    prompt = SystemMessage(content=SYSTEM_PROMPT)
     response = llm_with_tools.invoke([prompt] + state["messages"])
     return {"messages": [response]}
 
