@@ -161,8 +161,6 @@ window.chatApp = function chatApp() {
           const eventName = eventLine.replace("event:", "").trim();
           const data = JSON.parse(dataLines.map((line) => line.slice(5)).join("\n")).text;
 
-          console.log(data)
-
           if (eventName === "progress") {
             this.progressMessage = data;
           } else if (eventName === "token") {
