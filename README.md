@@ -11,8 +11,6 @@ A conversational AI chatbot specialized in The Legend of Zelda universe. Ask abo
 - [LangGraph](https://langchain-ai.github.io/langgraph/) — agent graph with ReAct loop (agent → tools → agent)
 - [LangChain Anthropic](https://python.langchain.com/docs/integrations/chat/anthropic/) — `claude-haiku-4-5` as the LLM
 - [FAISS](https://github.com/facebookresearch/faiss) + [HuggingFace Embeddings](https://huggingface.co/) — local vector store for RAG (`sentence-transformers/all-MiniLM-L6-v2`)
-- [langdetect](https://github.com/Mimino666/langdetect) — detects the user's language and instructs the agent to reply in kind
-- [Uvicorn](https://www.uvicorn.org/) — ASGI server
 
 **Frontend**
 - [Alpine.js](https://alpinejs.dev/) — reactive UI without a build step
@@ -27,7 +25,6 @@ A conversational AI chatbot specialized in The Legend of Zelda universe. Ask abo
 1. The user sends a message via the chat UI
 2. The frontend opens a `POST /api/chat` request and reads the response as a **Server-Sent Events (SSE)** stream
 3. The backend runs a **LangGraph ReAct agent**:
-   - Detects the user's language with `langdetect` and injects a language instruction into the system prompt
    - Decides whether to call the `zelda_rag` tool (FAISS similarity search over local `.md` and `.txt` knowledge files)
    - If tools are called, results are fed back and the agent loops until it has enough to answer
    - Streams the final answer token by token back to the client
@@ -50,7 +47,7 @@ chat_zelda/
 │   └── style.css            # Zelda-themed, dark/light
 └── src/
     ├── agent/
-    │   ├── agent.py         # LangGraph StateGraph, ReAct node, language detection
+    │   ├── agent.py         # LangGraph StateGraph, ReAct node
     │   └── session.py       # TTL session store with background cleanup
     ├── api/
     │   └── routes.py        # POST /api/chat SSE endpoint
@@ -58,7 +55,7 @@ chat_zelda/
     │   └── config.py        # Pydantic Settings
     ├── data/
     │   ├── characters.md    # Zelda character lore
-    │   └── games.txt        # Game summaries
+    │   └── games.txt        # Game List
     └── rag/
         └── rag.py           # FAISS vectorstore, zelda_rag tool
 ```
