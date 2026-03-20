@@ -40,6 +40,10 @@ window.chatApp = function chatApp() {
       if (saved === "light" || saved === "dark") {
         this.theme = saved;
       }
+
+      this.$watch('messages', () => {
+        this.scrollToBottom();
+      })
     },
 
     toggleTheme() {
@@ -72,10 +76,15 @@ window.chatApp = function chatApp() {
     },
 
     scrollToBottom() {
-      const container = document.querySelector("#messagesContainer");
-      if (container) {
-        container.scrollTop = container.scrollHeight;
-      }
+      this.$nextTick(() => {
+          const container = this.$refs.msgEl;
+          if (container) {
+              container.scrollTo({
+                  top: container.scrollHeight,
+                  behavior: 'smooth' // Scroll suave
+              });
+          }
+      });
     },
 
     renderMarkdown(content) {

@@ -28,28 +28,31 @@
     :class="theme"
     class="theme-transition"
   >
-    <button
-      class="theme-toggle"
-      @click="toggleTheme"
-      :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
-    >
-      <i :class="theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon'"></i>
-    </button>
-
     <main class="chat-shell">
       <header class="chat-header">
         <h1>The Legend of Zelda Chat</h1>
-        <button
-          class="download-btn"
-          @click="downloadMarkdown"
-          :disabled="messages.length === 0"
-        >
-          <i class="fa-solid fa-download"></i>
-          <span>Download</span>
-        </button>
+        <div class="header-action">
+          <button
+            class="download-btn"
+            @click="downloadMarkdown"
+            :disabled="messages.length === 0"
+          >
+            <i class="fa-solid fa-download"></i>
+            <span>Download</span>
+          </button>
+          <button
+            class="theme-toggle"
+            @click="toggleTheme"
+            :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            <i
+              :class="theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon'"
+            ></i>
+          </button>
+        </div>
       </header>
 
-      <section class="messages" id="messagesContainer">
+      <section x-ref="msgEl" class="messages" id="messagesContainer">
         <template x-for="(message, index) in messages" :key="index">
           <article class="message" :class="message.role">
             <div class="bubble" x-html="renderMarkdown(message.content)"></div>
@@ -72,7 +75,6 @@
           rows="3"
           maxlength="4000"
           placeholder="Ask about Hyrule, Link, timelines, lore..."
-          :disabled="processing || queueing"
           @input="autoResize($event)"
           @keydown="onKeydown($event)"
         ></textarea>

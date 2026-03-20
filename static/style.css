@@ -44,8 +44,9 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   overflow: hidden;
+  diplay: flex;
   font-family:
     Inter,
     system-ui,
@@ -69,11 +70,12 @@ body {
 
 .chat-shell {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto auto;
   gap: 10px;
   padding: 16px 20px;
+  flex: 1;
 }
 
 .chat-header {
@@ -85,6 +87,11 @@ body {
   width: 100%;
 }
 
+.chat-header .header-action {
+  display: inline-flex;
+  gap: 8px;
+}
+
 .chat-header h1 {
   font-size: 1.15rem;
   margin: 0;
@@ -94,12 +101,14 @@ body {
 
 .messages {
   width: 100%;
+  min-height: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 16px 24px;
   overflow-y: auto;
   box-shadow: var(--glow);
+  scroll-behavior: smooth;
 }
 
 .message {
@@ -162,9 +171,11 @@ body {
   0% {
     opacity: 0.55;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.55;
   }
@@ -236,15 +247,55 @@ textarea::placeholder {
 }
 
 .theme-toggle {
-  width: 44px;
-  height: 44px;
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
+  width: 38px;
+  height: 38px;
 }
 
 .send-btn:disabled,
 .download-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.download-btn span {
+  display: inline-block;
+}
+
+@media (max-width: 640px) {
+  .chat-shell {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .messages {
+    padding: 10px;
+    width: 100%;
+  }
+
+  .message.user {
+    padding-left: 40px;
+  }
+
+  .message.bot {
+    padding-right: 40px;
+  }
+
+  textarea {
+    min-height: calc(2 * 1.5rem + 16px);
+    max-height: calc(4 * 1.5rem + 16px);
+  }
+
+  .download-btn span {
+    display: none;
+  }
+
+  .message.user {
+    justify-content: flex-end;
+    padding-left: 4px;
+  }
+
+  .message.bot {
+    justify-content: flex-start;
+    padding-right: 4px;
+  }
 }
