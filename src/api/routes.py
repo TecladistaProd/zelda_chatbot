@@ -25,7 +25,7 @@ async def chat_stream(request: ChatRequest):
     history = session_store.get_history(request.session_id)
     messages = history + [HumanMessage(content=request.message)]
 
-    yield await sse_event("progress", "Summoning Zelda wisdom...")
+    yield await sse_event("progress", "Thinking...")
 
     full_messages = messages.copy()
 
@@ -35,11 +35,9 @@ async def chat_stream(request: ChatRequest):
             name = event.get("name", "")
 
             if kind == "on_tool_start":
-                tool_name = event.get("name", "tool")
-                yield await sse_event("token", f"\n\n*Using tool: {tool_name}...*\n\n")
-
-            elif kind == "on_tool_end":
-                yield await sse_event("token", f"\n\n*Done with: {name}*\n\n")
+                tool_input = event.get("data", {}).get("input", {})
+                query = tool_input.get("query", name) if isinstance(tool_input, dict) else name
+                yield await sse_event("progress", f"*Searching the Zelda archives: \"{query}\"...*\n\n")
 
             elif kind == "on_chat_model_stream":
                 chunk = event["data"].get("chunk")
