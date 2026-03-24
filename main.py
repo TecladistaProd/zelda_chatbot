@@ -9,7 +9,6 @@ from src.core.config import settings
 from src.api.routes import router
 from src.agent.session import session_store
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     session_store.start_cleanup()

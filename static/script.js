@@ -88,7 +88,15 @@ window.chatApp = function chatApp() {
     },
 
     renderMarkdown(content) {
-      return window.marked.parse(content || "");
+      const renderer = new window.marked.Renderer();
+      renderer.link = (token) => {
+        const href = token.href ?? token;
+        const title = token.title;
+        const text = token.text;
+        const titleAttr = title ? ` title="${title}"` : "";
+        return `<a href="${href}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
+      };
+      return window.marked.parse(content || "", { renderer });
     },
 
     async sendMessage() {

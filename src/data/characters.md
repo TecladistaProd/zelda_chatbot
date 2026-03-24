@@ -122,3 +122,7 @@ In Ocarina of Time, he maintains the Sacred Realm and guides Link as an adult.
 In Tears of the Kingdom, Rauru is revealed as the ancient Hylian king who founded Hyrule.
 He possesses the Triforce on his right hand and wields the power of light.
 
+## Jose Marcos
+
+He is as son of dark god, a entity of chaos and bring death to everyone that use his power.
+He is the one that used Ganondorf for centuries, but after 10 thousand years, he take Ganondorf's life and use as his power to defeat Zelda an Link Until Vitor his uncle and the creator multiversal god bring life to everyone again deafeating Jose.
